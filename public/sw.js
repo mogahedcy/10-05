@@ -62,10 +62,13 @@ self.addEventListener('fetch', (event) => {
         if (response) return response;
 
         return fetch(request).then((networkResponse) => {
-          return caches.open(IMAGE_CACHE).then((cache) => {
-            cache.put(request, networkResponse.clone());
-            return networkResponse;
-          });
+          if (networkResponse && networkResponse.status === 200) {
+            return caches.open(IMAGE_CACHE).then((cache) => {
+              cache.put(request, networkResponse.clone());
+              return networkResponse;
+            });
+          }
+          return networkResponse;
         });
       })
     );
@@ -99,10 +102,13 @@ self.addEventListener('fetch', (event) => {
       event.respondWith(
         caches.match(request).then((response) => {
           return response || fetch(request).then((networkResponse) => {
-            return caches.open(DYNAMIC_CACHE).then((cache) => {
-              cache.put(request, networkResponse.clone());
-              return networkResponse;
-            });
+            if (networkResponse && networkResponse.status === 200) {
+              return caches.open(DYNAMIC_CACHE).then((cache) => {
+                cache.put(request, networkResponse.clone());
+                return networkResponse;
+              });
+            }
+            return networkResponse;
           }).catch(() => {
             return caches.match('/offline.html');
           });

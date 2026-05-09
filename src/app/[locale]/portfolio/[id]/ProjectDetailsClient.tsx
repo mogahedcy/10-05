@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import Breadcrumb from '@/components/Breadcrumb';
+import SmartBacklinks from '@/components/SmartBacklinks';
 import {
   ArrowLeft,
   Calendar,
